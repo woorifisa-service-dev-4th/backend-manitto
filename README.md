@@ -5,6 +5,33 @@
 |--------|--------|--------|
 | <img src="https://avatars.githubusercontent.com/icebear0111" width="100"> | <img src="https://avatars.githubusercontent.com/mango0422" width="100"> | <img src="https://avatars.githubusercontent.com/YoungjaeRo" width="100"> |
 
+### 0. 프로젝트 구조
+```plaintext
+manitto
+ ├── src
+ │   ├── main
+ │   │   ├── java
+ │   │   │   ├── controller
+ │   │   │   │   ├── UserController.java
+ │   │   │   │   ├── RoomController.java
+ │   │   │   ├── domain
+ │   │   │   │   ├── User.java
+ │   │   │   │   ├── Room.java
+ │   │   │   ├── repository
+ │   │   │   │   ├── UserRepository.java
+ │   │   │   │   ├── RoomRepository.java
+ │   │   │   ├── service
+ │   │   │   │   ├── UserService.java
+ │   │   │   │   ├── RoomService.java
+ │   │   │   │   ├── ChatService.java
+ │   │   │   ├── util
+ │   │   │   │   ├── AsciiArtUtil.java
+ │   │   │   │   ├── Hasher.java
+ │   │   │   │   ├── DatabaseUtil.java
+ │   │   │   │   ├── RoomCodeGenerator.java
+ │   │   │   ├── ManittoMain.java
+```
+
 ### **1. 실행 흐름**
 
 ### **① 로그인 또는 회원가입 선택**
