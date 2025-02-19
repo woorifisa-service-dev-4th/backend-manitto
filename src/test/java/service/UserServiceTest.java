@@ -1,6 +1,6 @@
 package service;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import domain.User;
@@ -26,14 +26,14 @@ public class UserServiceTest {
         String email = "test@example.com";
         String password = "password123";
         String name = "Test User";
-        when(userRepository.findByEmail(email)).thenReturn(null);
+        given(userRepository.findByEmail(email)).willReturn(null);
 
         // when
         boolean result = userService.signup(email, password, name);
 
         // then
         assertTrue(result);
-        verify(userRepository, times(1)).save(any(User.class));
+        then(userRepository).should(times(1)).save(any(User.class));
     }
 
     @Test
@@ -43,13 +43,13 @@ public class UserServiceTest {
         String password = "password123";
         String name = "Test User";
         User existingUser = new User(email, name, "hashedPassword", "salt");
-        when(userRepository.findByEmail(email)).thenReturn(existingUser);
+        given(userRepository.findByEmail(email)).willReturn(existingUser);
 
         // when
         boolean result = userService.signup(email, password, name);
 
         // then
         assertFalse(result);
-        verify(userRepository, never()).save(any(User.class));
+        then(userRepository).should(never()).save(any(User.class));
     }
 }
