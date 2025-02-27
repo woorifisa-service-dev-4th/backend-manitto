@@ -1,35 +1,39 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
 
 public class Room {
-    private final String name;
-    private final int maxParticipants;
-    private final String joinCode;
-    private final List<String> participants;
+    private int id;
+    private int user1Id;
+    private int user2Id;
+    private Timestamp createdAt;
 
-    public Room(String name, int maxParticipants, String joinCode) {
-        this.name = name;
-        this.maxParticipants = maxParticipants;
-        this.joinCode = joinCode;
-        this.participants = new ArrayList<>();
+    public Room(int id, int user1Id, int user2Id, Timestamp createdAt) {
+        this.id = id;
+        this.user1Id = user1Id;
+        this.user2Id = user2Id;
+        this.createdAt = createdAt;
     }
 
-    public String getName() { return name; }
-    public int getMaxParticipants() { return maxParticipants; }
-    public String getJoinCode() { return joinCode; }
-    public List<String> getParticipants() { return participants; }
-
-    public boolean addParticipant(String username) {
-        if (participants.size() < maxParticipants) {
-            participants.add(username);
-            return true;
-        }
-        return false;
+    public Room(int user1Id, int user2Id) {
+        this.user1Id = user1Id;
+        this.user2Id = user2Id;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
     }
 
-    public String generateAnonymousName() {
-        return "익명" + (participants.size() + 1);
+    public int getId() {
+        return id;
+    }
+
+    public int getUser1Id() {
+        return user1Id;
+    }
+
+    public int getUser2Id() {
+        return user2Id;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 }

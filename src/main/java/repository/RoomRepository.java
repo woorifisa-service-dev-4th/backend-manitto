@@ -1,43 +1,66 @@
 package repository;
 
 import domain.Room;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import util.DatabaseUtil;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomRepository {
-    private static final Logger logger = LogManager.getLogger(UserRepository.class);
 
-    public void saveRoom(Room room) {
-        String sql = "INSERT INTO rooms (name, max_participants, join_code) VALUES (?, ?, ?)";
+    public void save(Room room) {
+        String sql = "INSERT INTO rooms (user1_id, user2_id) VALUES (?, ?)";
+
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, room.getName());
-            stmt.setInt(2, room.getMaxParticipants());
-            stmt.setString(3, room.getJoinCode());
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, room.getUser1Id());
+            stmt.setInt(2, room.getUser2Id());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
-            logger.error("방 저장 중 오류 발생", e);
+            e.printStackTrace();
         }
     }
 
-    public Room findRoomByCode(String encryptedCode) {
-        String sql = "SELECT * FROM rooms WHERE join_code = ?";
+    public Room findById(int id) {
+        String sql = "SELECT * FROM rooms WHERE id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, encryptedCode);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 return new Room(
-                        rs.getString("name"),
-                        rs.getInt("max_participants"),
-                        rs.getString("join_code")
+                        rs.getInt("id"),
+                        rs.getInt("user1_id"),
+                        rs.getInt("user2_id"),
+                        rs.getTimestamp("created_at")
                 );
             }
         } catch (SQLException e) {
-            logger.error("방 조회 중 오류 발생", e);
+            e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Room> findAll() {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT * FROM rooms";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                rooms.add(new Room(
+                        rs.getInt("id"),
+                        rs.getInt("user1_id"),
+                        rs.getInt("user2_id"),
+                        rs.getTimestamp("created_at")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rooms;
     }
 }

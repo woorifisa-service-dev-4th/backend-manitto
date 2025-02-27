@@ -1,31 +1,46 @@
 package domain;
 
-public class User {
-    private String email;
-    private String name;
-    private String hashedPassword;
-    private String salt;
+import java.sql.Timestamp;
 
-    public User(String email, String name, String hashedPassword, String salt) {
+public class User {
+    private int id;
+    private String username;
+    private String email;
+    private String password;
+    private Timestamp createdAt;
+
+    public User(int id, String username, String email, String password, Timestamp createdAt) {
+        this.id = id;
+        this.username = username;
         this.email = email;
-        this.name = name;
-        this.hashedPassword = hashedPassword;
-        this.salt = salt;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
-    }
-
-    public String getSalt() {
-        return salt;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 }
