@@ -3,7 +3,7 @@ package domain;
 import java.sql.Timestamp;
 
 public class Room {
-    private int id;
+    private long id;
     private int hostId;  // user1Id → hostId
     private String inviteCode; // 초대 코드 추가
     private String status; // 상태 추가
@@ -26,7 +26,7 @@ public class Room {
         this.createdAt = new Timestamp(System.currentTimeMillis());
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

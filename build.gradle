@@ -2,10 +2,15 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'war'
+    id 'application'
 }
 
 group = 'threemen.back'
 version = '1.0-SNAPSHOT'
+
+application {
+    mainClass = 'EmbeddedTomcat' // 🚀 실행할 Main 클래스 지정
+}
 
 java {
 	toolchain {
@@ -31,8 +36,11 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:4.11.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.23.0'
 
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.16'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.16'
+
     // Servlet API (톰캣이 제공하므로 providedCompile 사용)
-    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
 
     // JSP 및 JSTL 지원
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'

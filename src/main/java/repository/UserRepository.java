@@ -11,8 +11,8 @@ public class UserRepository {
         String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"; // created_at 자동 설정됨
 
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, user.getUsername());
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
 
@@ -36,7 +36,7 @@ public class UserRepository {
         System.out.println("🔍 [DB 조회] 이메일 찾기 요청: " + email);
 
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
 
@@ -53,8 +53,7 @@ public class UserRepository {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("profile_image"),
-                        rs.getTimestamp("created_at")
-                ));
+                        rs.getTimestamp("created_at")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,12 +63,11 @@ public class UserRepository {
         return Optional.empty();
     }
 
-
     public User findById(int id) {
         String sql = "SELECT * FROM users WHERE id = ?"; // 테이블명 수정
 
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -80,8 +78,30 @@ public class UserRepository {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("profile_image"),
-                        rs.getTimestamp("created_at")
-                );
+                        rs.getTimestamp("created_at"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User findById(Long userId) {
+        String sql = "SELECT id, name, email, profile_image, created_at FROM users WHERE id = ?";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        null, // 🔹 password는 반환하지 않음 (보안상 문제 방지)
+                        rs.getString("profile_image"),
+                        rs.getTimestamp("created_at"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

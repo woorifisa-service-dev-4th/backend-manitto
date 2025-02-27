@@ -4,23 +4,23 @@ import java.sql.Timestamp;
 
 public class User {
     private int id;
-    private String username;
+    private String name;
     private String email;
     private String password;
     private String profileImage; // 🔹 프로필 이미지 추가
     private Timestamp createdAt;
 
-    public User(int id, String username, String email, String password, String profileImage, Timestamp createdAt) {
+    public User(int id, String name, String email, String password, String profileImage, Timestamp createdAt) {
         this.id = id;
-        this.username = username;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.profileImage = profileImage;
         this.createdAt = createdAt;
     }
 
-    public User(String username, String email, String password) {
-        this.username = username;
+    public User(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.createdAt = new Timestamp(System.currentTimeMillis());
@@ -30,8 +30,8 @@ public class User {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {

@@ -1,15 +1,15 @@
 package controller;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet("/api/*")  // 모든 /api/* 요청을 처리
+@WebServlet("/api/*") // 모든 /api/* 요청을 처리
 public class FrontControllerServlet extends HttpServlet {
     private final Map<String, Controller> controllerMap = new HashMap<>();
 
@@ -19,12 +19,28 @@ public class FrontControllerServlet extends HttpServlet {
         controllerMap.put("/api/signup", new SignupController());
         controllerMap.put("/api/room/create", new RoomCreateController());
         controllerMap.put("/api/room/join", new RoomJoinController());
+        controllerMap.put("/api/user/rooms", new UserRoomsController());
+        controllerMap.put("/api/room/participants", new RoomParticipantsController());
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String path = request.getRequestURI();
-        Controller controller = controllerMap.get(path);
+        String contextPath = request.getContextPath();
+        String relativePath = path.substring(contextPath.length()); // ✅ contextPath 제거
+
+        Controller controller = controllerMap.get(relativePath); // ✅ 수정된 경로 사용
 
         if (controller != null) {
             controller.process(request, response);

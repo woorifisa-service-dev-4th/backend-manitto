@@ -5,20 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>채팅방</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="assets/script.js"></script>
+  <script defer src="assets/room.js"></script>
 </head>
 <body class="flex flex-col items-center justify-center h-screen bg-gray-100">
+
 <div class="bg-white p-6 rounded-lg shadow-md w-96 text-center">
   <h2 class="text-2xl font-bold">채팅방</h2>
+
+  <!-- ✅ 방 생성 폼 -->
   <form id="createRoomForm" class="mt-4 space-y-3">
     <input type="text" id="roomName" placeholder="방 이름" class="w-full p-2 border rounded" required />
     <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">방 생성</button>
   </form>
+
+  <!-- ✅ 방 참가 폼 -->
   <form id="joinRoomForm" class="mt-4 space-y-3">
     <input type="text" id="roomCode" placeholder="참가 코드" class="w-full p-2 border rounded" required />
     <button type="submit" class="w-full bg-green-500 text-white py-2 rounded">방 참가</button>
   </form>
+
+  <!-- ✅ 참가한 방 목록 -->
+  <div class="mt-6">
+    <h3 class="text-lg font-semibold">참가한 방</h3>
+    <ul id="roomList" class="mt-2 space-y-2 text-left text-gray-700"></ul>
+  </div>
+
+  <!-- ✅ 에러 메시지 -->
   <p id="errorMessage" class="text-red-500 text-sm mt-2"></p>
 </div>
+
 </body>
 </html>
