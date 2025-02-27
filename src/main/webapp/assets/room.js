@@ -1,3 +1,4 @@
+// /src/main/webapp/assets/room.js
 document.addEventListener('DOMContentLoaded', async () => {
   const errorMessage = document.getElementById('errorMessage');
 
@@ -34,8 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const result = await response.json();
       if (result.success) {
-        // ✅ 방 참가 성공 시 해당 roomId로 waiting-room.html 이동
-        window.location.href = `waiting-room.html?roomId=${result.roomId}`;
+        // ✅ 방 참가 성공 시 해당 roomId로 waiting-room.jsp 이동
+        window.location.href = `waiting-room?roomId=${result.roomId}`;
       } else {
         errorMessage.innerText = result.message;
       }
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
           result.rooms.forEach((room) => {
             const roomItem = document.createElement('li');
-            roomItem.innerHTML = `<a href="waiting-room.html?roomId=${room.roomId}" class="text-blue-500 underline">방 ID: ${room.roomId}</a>`;
+            roomItem.innerHTML = `<a href="waiting-room.jsp?roomId=${room.roomId}" class="text-blue-500 underline">방 ID: ${room.roomId}</a>`;
             roomList.appendChild(roomItem);
           });
         }

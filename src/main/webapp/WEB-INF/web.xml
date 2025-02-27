@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <!-- index.jsp를 루트 URL (/)에 매핑 -->
+    <servlet>
+        <servlet-name>index</servlet-name>
+        <jsp-file>/index.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- lobby.jsp를 /lobby에 매핑 -->
+    <servlet>
+        <servlet-name>lobby</servlet-name>
+        <jsp-file>/lobby.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>lobby</servlet-name>
+        <url-pattern>/lobby</url-pattern>
+    </servlet-mapping>
+
+    <!-- matching-result.jsp를 /matching-result에 매핑 -->
+    <servlet>
+        <servlet-name>matchingResult</servlet-name>
+        <jsp-file>/matching-result.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>matchingResult</servlet-name>
+        <url-pattern>/matching-result</url-pattern>
+    </servlet-mapping>
+
+    <!-- matching.jsp를 /matching에 매핑 -->
+    <servlet>
+        <servlet-name>matching</servlet-name>
+        <jsp-file>/matching.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>matching</servlet-name>
+        <url-pattern>/matching</url-pattern>
+    </servlet-mapping>
+
+    <!-- register.jsp를 /register에 매핑 -->
+    <servlet>
+        <servlet-name>register</servlet-name>
+        <jsp-file>/register.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>register</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+    <!-- style.css를 /css/styles.css에 매핑핑 -->
+    <servlet>
+        <servlet-name>css/style.css</servlet-name>
+        <jsp-file>/css/style.css</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>css/style.css</servlet-name>
+        <url-pattern>/css/style.css</url-pattern>
+    </servlet-mapping>
+
+</web-app>

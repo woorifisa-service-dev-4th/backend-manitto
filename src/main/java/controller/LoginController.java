@@ -24,6 +24,7 @@ public class LoginController extends BaseController {
             HttpSession session = request.getSession();
             session.setAttribute("userEmail", email);
             session.setAttribute("userId", user.getId());
+            session.setAttribute("username", user.getName());
             jsonResponse.put("success", true);
         } else {
             jsonResponse.put("success", false);
