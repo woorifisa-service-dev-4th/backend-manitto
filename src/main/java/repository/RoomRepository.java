@@ -5,16 +5,18 @@ import util.DatabaseUtil;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RoomRepository {
 
     public void save(Room room) {
-        String sql = "INSERT INTO rooms (user1_id, user2_id) VALUES (?, ?)";
+        String sql = "INSERT INTO rooms (host_id, invite_code, status) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, room.getUser1Id());
-            stmt.setInt(2, room.getUser2Id());
+            stmt.setInt(1, room.getHostId());
+            stmt.setString(2, room.getInviteCode());
+            stmt.setString(3, room.getStatus());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -32,9 +34,11 @@ public class RoomRepository {
             if (rs.next()) {
                 return new Room(
                         rs.getInt("id"),
-                        rs.getInt("user1_id"),
-                        rs.getInt("user2_id"),
-                        rs.getTimestamp("created_at")
+                        rs.getInt("host_id"),
+                        rs.getString("invite_code"),
+                        rs.getString("status"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("expired_at")
                 );
             }
         } catch (SQLException e) {
@@ -53,14 +57,40 @@ public class RoomRepository {
             while (rs.next()) {
                 rooms.add(new Room(
                         rs.getInt("id"),
-                        rs.getInt("user1_id"),
-                        rs.getInt("user2_id"),
-                        rs.getTimestamp("created_at")
+                        rs.getInt("host_id"),
+                        rs.getString("invite_code"),
+                        rs.getString("status"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("expired_at")
                 ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return rooms;
+    }
+
+    public Optional<Room> findByInviteCode(String inviteCode){
+        String sql = "SELECT * FROM rooms WHERE invite_code = ?";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, inviteCode);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(new Room(
+                        rs.getInt("id"),
+                        rs.getInt("host_id"),
+                        rs.getString("invite_code"),
+                        rs.getString("status"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("expired_at")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 }

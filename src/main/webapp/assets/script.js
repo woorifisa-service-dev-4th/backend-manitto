@@ -53,18 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (createRoomForm) {
         createRoomForm.addEventListener("submit", async (event) => {
             event.preventDefault();
-            const roomName = document.getElementById("roomName").value;
 
-            const response = await fetch("/api/room", {
+            const response = await fetch("/api/room/create", { // 🔹 URL 변경
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action: "create", user1Id: 1, user2Id: 0 }) // 예제용 데이터
+                headers: { "Content-Type": "application/json" }
             });
 
             const result = await response.json();
 
             if (result.success) {
-                alert("방이 생성되었습니다! 방 ID: " + result.roomId);
+                alert("방이 생성되었습니다! 초대 코드: " + result.inviteCode);
             } else {
                 document.getElementById("errorMessage").innerText = "방 생성 실패!";
             }
@@ -78,10 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
             const roomCode = document.getElementById("roomCode").value;
 
-            const response = await fetch("/api/room", {
+            const response = await fetch("/api/room/join", { // 🔹 URL 변경
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action: "join", roomId: parseInt(roomCode), userId: 2 }) // 예제용 데이터
+                body: JSON.stringify({ inviteCode: roomCode })
             });
 
             const result = await response.json();
@@ -94,6 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+
     // 채팅 메시지 전송
     const chatForm = document.getElementById("chatForm");
     if (chatForm) {
@@ -101,11 +101,11 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
             const message = document.getElementById("message").value;
 
-            // 서버로 메시지 전송 (예제 API, 실제 채팅 서버 필요)
+            // 서버로 메시지 전송
             const response = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ roomId: 1, senderId: 2, message })
+                body: JSON.stringify({ message })
             });
 
             const result = await response.json();

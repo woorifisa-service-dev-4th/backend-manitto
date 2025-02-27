@@ -13,11 +13,13 @@ public class UserService {
     public boolean signup(String username, String email, String password) {
         // 이메일 유효성 검사
         if (!isValidEmail(email)) {
+            System.out.println("❌ 이메일 형식이 올바르지 않음: " + email);
             return false;
         }
 
         // 중복 이메일 검사
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(email).isPresent()) { // ✅ 수정
+            System.out.println("❌ 이미 존재하는 이메일: " + email);
             return false;
         }
 
@@ -30,19 +32,24 @@ public class UserService {
         return true;
     }
 
-    public boolean login(String email, String password) {
-        User user = userRepository.findByEmail(email);
+    public User login(String email, String password) {
+        Optional<User> user = userRepository.findByEmail(email);
 
-        if (user == null) {
-            System.out.println("로그인 실패: 존재하지 않는 이메일");
-            return false;
+        if (user.isPresent()) {
+            System.out.println("✅ [로그인 시도] 이메일 존재: " + email);
+            System.out.println("    🔹 입력된 비밀번호: " + password);
+            System.out.println("    🔹 저장된 비밀번호: " + user.get().getPassword());
+
+            if (user.get().getPassword().equals(Hasher.hash(password))) {
+                System.out.println("✅ [로그인 성공] " + email);
+                return user.get();
+            } else {
+                System.out.println("❌ [로그인 실패] 비밀번호 불일치: " + email);
+            }
+        } else {
+            System.out.println("❌ [로그인 실패] 존재하지 않는 이메일: " + email);
         }
-
-        String hashedPassword = Hasher.hash(password);
-        System.out.println("입력한 비밀번호 해싱값: " + hashedPassword);
-        System.out.println("DB 저장된 해싱값: " + user.getPassword());
-
-        return hashedPassword.equals(user.getPassword());
+        return null;
     }
 
 
@@ -51,6 +58,6 @@ public class UserService {
     }
 
     public Optional<User> getUserByEmail(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email));
+        return userRepository.findByEmail(email);
     }
 }

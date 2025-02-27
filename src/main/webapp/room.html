@@ -1,41 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>채팅방</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="assets/script.js"></script>
-  </head>
-  <body class="flex flex-col items-center justify-center h-screen bg-gray-100">
-    <h2 class="text-2xl font-bold">채팅방</h2>
-
-    <form id="createRoomForm" class="mt-4">
-      <input
-        type="text"
-        id="roomName"
-        placeholder="방 이름"
-        class="p-2 border rounded"
-        required
-      />
-      <button type="submit" class="bg-blue-500 text-white p-2 rounded">
-        방 생성
-      </button>
-    </form>
-
-    <form id="joinRoomForm" class="mt-4">
-      <input
-        type="text"
-        id="roomCode"
-        placeholder="참가 코드"
-        class="p-2 border rounded"
-        required
-      />
-      <button type="submit" class="bg-green-500 text-white p-2 rounded">
-        방 참가
-      </button>
-    </form>
-
-    <p id="errorMessage" class="text-red-500 text-sm mt-2"></p>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>채팅방</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="assets/script.js"></script>
+</head>
+<body class="flex flex-col items-center justify-center h-screen bg-gray-100">
+<div class="bg-white p-6 rounded-lg shadow-md w-96 text-center">
+  <h2 class="text-2xl font-bold">채팅방</h2>
+  <form id="createRoomForm" class="mt-4 space-y-3">
+    <input type="text" id="roomName" placeholder="방 이름" class="w-full p-2 border rounded" required />
+    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">방 생성</button>
+  </form>
+  <form id="joinRoomForm" class="mt-4 space-y-3">
+    <input type="text" id="roomCode" placeholder="참가 코드" class="w-full p-2 border rounded" required />
+    <button type="submit" class="w-full bg-green-500 text-white py-2 rounded">방 참가</button>
+  </form>
+  <p id="errorMessage" class="text-red-500 text-sm mt-2"></p>
+</div>
+</body>
 </html>

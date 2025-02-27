@@ -14,8 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/api/room")
-public class RoomServlet extends HttpServlet {
+@WebServlet("/api/room/join") // 🔹 방 참가 엔드포인트
+public class RoomJoinServlet extends HttpServlet {
     private final RoomService roomService = new RoomService();
 
     @Override
@@ -41,23 +41,22 @@ public class RoomServlet extends HttpServlet {
         }
 
         JSONObject jsonRequest = new JSONObject(requestBody.toString());
-        String action = jsonRequest.getString("action");
+        String inviteCode = jsonRequest.optString("inviteCode", "");
+
         JSONObject jsonResponse = new JSONObject();
 
-        if ("create".equals(action)) {
-            int user1Id = jsonRequest.getInt("user1Id");
-            int user2Id = jsonRequest.getInt("user2Id");
-            Room newRoom = roomService.createRoom(user1Id, user2Id);
-            jsonResponse.put("success", true);
-            jsonResponse.put("roomId", newRoom.getId());
-        } else if ("join".equals(action)) {
-            int roomId = jsonRequest.getInt("roomId");
-            int userId = jsonRequest.getInt("userId");
-            boolean success = roomService.joinRoom(roomId, userId);
-
-            jsonResponse.put("success", success);
-            if (!success) {
-                jsonResponse.put("message", "방 참가 실패! 방이 가득 찼거나 존재하지 않습니다.");
+        if (inviteCode.isEmpty()) {
+            jsonResponse.put("success", false);
+            jsonResponse.put("message", "초대 코드가 필요합니다.");
+        } else {
+            Optional<Room> room = roomService.getRoomByInviteCode(inviteCode);
+            if (room.isPresent()) {
+                session.setAttribute("roomId", room.get().getId()); // 🔹 참가한 방 ID 저장
+                jsonResponse.put("success", true);
+                jsonResponse.put("roomId", room.get().getId());
+            } else {
+                jsonResponse.put("success", false);
+                jsonResponse.put("message", "초대 코드가 올바르지 않습니다.");
             }
         }
 

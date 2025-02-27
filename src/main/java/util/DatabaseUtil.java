@@ -63,6 +63,30 @@ public class DatabaseUtil {
                     "FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
+            // 방 참가자 테이블 (room_participants)
+            stmt.execute("CREATE TABLE IF NOT EXISTS room_participants (" +
+                    "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                    "room_id BIGINT NOT NULL, " +
+                    "user_id BIGINT NOT NULL, " +
+                    "is_matched BOOLEAN DEFAULT FALSE, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+            // 마니또 매칭 테이블 (manitto_pairs)
+            stmt.execute("CREATE TABLE IF NOT EXISTS manitto_pairs (" +
+                    "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
+                    "room_id BIGINT NOT NULL, " +
+                    "giver_id BIGINT NOT NULL, " +
+                    "receiver_id BIGINT NOT NULL, " +
+                    "revealed_at TIMESTAMP NULL, " +
+                    "FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (giver_id) REFERENCES users(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+
         } catch (SQLException e) {
             throw new RuntimeException("MySQL 데이터베이스 초기화 중 오류 발생!", e);
         }

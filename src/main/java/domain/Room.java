@@ -4,20 +4,25 @@ import java.sql.Timestamp;
 
 public class Room {
     private int id;
-    private int user1Id;
-    private int user2Id;
+    private int hostId;  // user1Id → hostId
+    private String inviteCode; // 초대 코드 추가
+    private String status; // 상태 추가
     private Timestamp createdAt;
+    private Timestamp expiredAt;
 
-    public Room(int id, int user1Id, int user2Id, Timestamp createdAt) {
+    public Room(int id, int hostId, String inviteCode, String status, Timestamp createdAt, Timestamp expiredAt) {
         this.id = id;
-        this.user1Id = user1Id;
-        this.user2Id = user2Id;
+        this.hostId = hostId;
+        this.inviteCode = inviteCode;
+        this.status = status;
         this.createdAt = createdAt;
+        this.expiredAt = expiredAt;
     }
 
-    public Room(int user1Id, int user2Id) {
-        this.user1Id = user1Id;
-        this.user2Id = user2Id;
+    public Room(int hostId, String inviteCode, String status) {
+        this.hostId = hostId;
+        this.inviteCode = inviteCode;
+        this.status = status;
         this.createdAt = new Timestamp(System.currentTimeMillis());
     }
 
@@ -25,15 +30,23 @@ public class Room {
         return id;
     }
 
-    public int getUser1Id() {
-        return user1Id;
+    public int getHostId() {
+        return hostId;
     }
 
-    public int getUser2Id() {
-        return user2Id;
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public Timestamp getCreatedAt() {
         return createdAt;
+    }
+
+    public Timestamp getExpiredAt() {
+        return expiredAt;
     }
 }

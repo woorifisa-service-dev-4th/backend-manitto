@@ -3,21 +3,26 @@ package repository;
 import domain.User;
 import util.DatabaseUtil;
 import java.sql.*;
+import java.util.Optional;
 
 public class UserRepository {
 
     public void save(User user) {
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"; // created_at 제거
+        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"; // created_at 자동 설정됨
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, user.getUsername());  // name 컬럼과 매칭
+            stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getPassword()); // 3개만 설정 (created_at X)
+            stmt.setString(3, user.getPassword());
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("✅ 회원가입 성공: " + user.getEmail());
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int userId = generatedKeys.getInt(1);
+                    System.out.println("✅ 회원가입 성공: " + user.getEmail() + " (ID: " + userId + ")");
+                }
             } else {
                 System.out.println("❌ 회원가입 실패: " + user.getEmail());
             }
@@ -26,10 +31,9 @@ public class UserRepository {
         }
     }
 
-
-
-    public User findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";  // users로 변경
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        System.out.println("🔍 [DB 조회] 이메일 찾기 요청: " + email);
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -37,26 +41,33 @@ public class UserRepository {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                System.out.println("유저 조회 성공: " + email);
-                return new User(
+                System.out.println("✅ [DB 조회 성공] 이메일 존재 확인: " + email);
+                System.out.println("    🔹 ID: " + rs.getInt("id"));
+                System.out.println("    🔹 Name: " + rs.getString("name"));
+                System.out.println("    🔹 Email: " + rs.getString("email"));
+                System.out.println("    🔹 Password: " + rs.getString("password"));
+
+                return Optional.of(new User(
                         rs.getInt("id"),
-                        rs.getString("name"), // name 컬럼으로 변경
+                        rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password"),
+                        rs.getString("profile_image"),
                         rs.getTimestamp("created_at")
-                );
-            } else {
-                System.out.println("유저 조회 실패: " + email);
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+
+        System.out.println("❌ [DB 조회 실패] 해당 이메일을 찾을 수 없음: " + email);
+        return Optional.empty();
     }
 
 
     public User findById(int id) {
-        String sql = "SELECT * FROM user WHERE id = ?";
+        String sql = "SELECT * FROM users WHERE id = ?"; // 테이블명 수정
+
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -65,9 +76,10 @@ public class UserRepository {
             if (rs.next()) {
                 return new User(
                         rs.getInt("id"),
-                        rs.getString("username"),
+                        rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password"),
+                        rs.getString("profile_image"),
                         rs.getTimestamp("created_at")
                 );
             }

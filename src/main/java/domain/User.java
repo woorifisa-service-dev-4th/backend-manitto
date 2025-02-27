@@ -7,13 +7,15 @@ public class User {
     private String username;
     private String email;
     private String password;
+    private String profileImage; // 🔹 프로필 이미지 추가
     private Timestamp createdAt;
 
-    public User(int id, String username, String email, String password, Timestamp createdAt) {
+    public User(int id, String username, String email, String password, String profileImage, Timestamp createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.profileImage = profileImage;
         this.createdAt = createdAt;
     }
 
@@ -38,6 +40,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
     }
 
     public Timestamp getCreatedAt() {
