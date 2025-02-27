@@ -1,7 +1,6 @@
 package manitto.servlet.model;
 
-import manitto.servlet.model.UserDTO;
-import manitto.servlet.util.DBConnectionPool;
+import manitto.servlet.listener.DBConnectionPoolListener;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +10,7 @@ import java.sql.SQLException;
 public class UserDAO {
     public UserDTO getUserByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
-        try (Connection conn = DBConnectionPool.getConnection();
+        try (Connection conn = DBConnectionPoolListener.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, email);
@@ -33,7 +32,7 @@ public class UserDAO {
 
     public boolean createUser(UserDTO user) {
         String sql = "INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)";
-        try (Connection conn = DBConnectionPool.getConnection();
+        try (Connection conn = DBConnectionPoolListener.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, user.getEmail());

@@ -13,8 +13,6 @@ public class UserController implements Controller {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        System.out.println("UserController action: " + action);
-
         if ("login".equals(action)) {
             login(request, response);
         } else if ("register".equals(action)) {

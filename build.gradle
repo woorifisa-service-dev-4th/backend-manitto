@@ -28,6 +28,9 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
     implementation 'com.mysql:mysql-connector-j:9.2.0'
+
+    implementation 'org.apache.tomcat:tomcat-jdbc:10.1.16'
+
 }
 
 test {

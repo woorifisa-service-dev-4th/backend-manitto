@@ -29,7 +29,7 @@
         <button type="submit">회원가입</button>
     </form>
 
-    <p>이미 회원이신가요? <a href="login.jsp">로그인</a></p>
+    <p>이미 회원이신가요? <a href="index.jsp">로그인</a></p>
 </div>
 
 <script>
