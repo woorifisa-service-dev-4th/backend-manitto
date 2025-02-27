@@ -27,22 +27,23 @@ public class UserService {
         String hashedPassword = Hasher.hash(password);
         User newUser = new User(username, email, hashedPassword);
 
-        // DB에 저장
-        userRepository.save(newUser);
-        return true;
+        try {
+            userRepository.save(newUser);
+            return true;
+        } catch (Exception e) {
+            System.err.println("회원가입 중 예외 발생: " + e.getMessage());
+            return false;
+        }
     }
 
     public User login(String email, String password) {
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmail(email);
 
-        if (user.isPresent()) {
-            System.out.println("[로그인 시도] 이메일 존재: " + email);
-            System.out.println("입력된 비밀번호: " + password);
-            System.out.println("저장된 비밀번호: " + user.get().getPassword());
-
-            if (user.get().getPassword().equals(Hasher.hash(password))) {
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (user.getPassword().equals(Hasher.hash(password))) {
                 System.out.println("[로그인 성공] " + email);
-                return user.get();
+                return user;
             } else {
                 System.out.println("[로그인 실패] 비밀번호 불일치: " + email);
             }

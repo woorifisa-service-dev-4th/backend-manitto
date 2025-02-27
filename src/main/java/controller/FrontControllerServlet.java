@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet("/api/*") // 모든 /api/* 요청을 처리
+@WebServlet("/api/*")
 public class FrontControllerServlet extends HttpServlet {
     private final Map<String, Controller> controllerMap = new HashMap<>();
 
@@ -38,10 +38,9 @@ public class FrontControllerServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String path = request.getRequestURI();
         String contextPath = request.getContextPath();
-        String relativePath = path.substring(contextPath.length()); // ✅ contextPath 제거
+        String relativePath = path.substring(contextPath.length());
 
-        Controller controller = controllerMap.get(relativePath); // ✅ 수정된 경로 사용
-
+        Controller controller = controllerMap.get(relativePath);
         if (controller != null) {
             controller.process(request, response);
         } else {

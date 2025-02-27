@@ -3,30 +3,17 @@ package controller;
 import service.UserService;
 import domain.User;
 import org.json.JSONObject;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.BufferedReader;
 import java.io.IOException;
 
-public class LoginController implements Controller {
+public class LoginController extends BaseController {
     private final UserService userService = new UserService();
 
     @Override
     public void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        StringBuilder requestBody = new StringBuilder();
-        try (BufferedReader reader = request.getReader()) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                requestBody.append(line);
-            }
-        }
-
-        JSONObject jsonRequest = new JSONObject(requestBody.toString());
+        JSONObject jsonRequest = parseJsonRequest(request);
         String email = jsonRequest.getString("email");
         String password = jsonRequest.getString("password");
 
@@ -37,13 +24,11 @@ public class LoginController implements Controller {
             HttpSession session = request.getSession();
             session.setAttribute("userEmail", email);
             session.setAttribute("userId", user.getId());
-
             jsonResponse.put("success", true);
         } else {
             jsonResponse.put("success", false);
             jsonResponse.put("message", "로그인 실패! 이메일 또는 비밀번호를 확인하세요.");
         }
-
-        response.getWriter().write(jsonResponse.toString());
+        writeJsonResponse(response, jsonResponse);
     }
 }
